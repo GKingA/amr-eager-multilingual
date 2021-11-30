@@ -10,8 +10,8 @@ generated it (aligned to it).
 @since: 03-10-16
 '''
 import sys
-reload(sys)  
-sys.setdefaultencoding('utf8')
+#reload(sys)  
+#sys.setdefaultencoding('utf8')
 
 class Node:
     def __init__(self, token, var = None, concept = None, isConst = None):

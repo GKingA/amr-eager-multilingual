@@ -12,7 +12,7 @@ etc.
 '''
 
 from collections import defaultdict
-import cPickle as pickle
+import pickle
 import operator
 from subgraph import Subgraph
 from node import Node
@@ -25,11 +25,11 @@ class Resources:
 
         table = {}
         freq = {}
-        print "Storing tables.."
-        print "Number of tokens:", len(Resources.phrasetable.keys())
+        print("Storing tables..")
+        print("Number of tokens:", len(Resources.phrasetable.keys()))
         for i, token in enumerate(Resources.phrasetable):
             if i % 100 == 0:
-                print "Token:", i
+                print("Token:", i)
             sg = max(Resources.phrasetable[token].iteritems(), key=operator.itemgetter(1))[0]
             table[token] = sg
 
@@ -40,7 +40,11 @@ class Resources:
         Resources.phrasetable = defaultdict(lambda : defaultdict(int))
 
         if empty == False:
-            Resources.phrasetable = pickle.load(open(model_dir + "/phrasetable.p", "rb"))
+            #Resources.phrasetable = pickle._Unpickler(open(model_dir + "/phrasetable.p", "rb")).load()#pickle.load(open(model_dir + "/phrasetable.p", "rb"))
+            phrasetable = pickle._Unpickler(open(model_dir + "/phrasetable.p", "rb"))
+            phrasetable.encoding = 'latin1'
+            #phrasetable.encoding = 'utf-8'
+            Resources.phrasetable = phrasetable.load()
             Resources.organizations = defaultdict(list)
             for line in open(model_dir + "/organizations.txt"):
                 fields = line.strip().split()

@@ -14,6 +14,7 @@ from relations import Relations
 from node import Node
 from buftoken import BufToken
 import embs
+import numpy as np
 
 class Stack:
     def __init__(self, embs):
@@ -136,7 +137,7 @@ class Stack:
                 ret.extend(self.embs.nes.get("<TOP>"))
             else:
                 ret.extend(self.embs.nes.get(item.token.ne))
-        for i in range(len(ret)/self.embs.nes.dim, origK):
+        for i in np.arange(len(ret)/self.embs.nes.dim, origK):
             ret.extend(self.embs.nes.get("<NULLNE>"))
         return ret
 

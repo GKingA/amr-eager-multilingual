@@ -102,40 +102,34 @@ class PretrainedEmbs:
         
     def get(self, word):
         assert(word is not None)
-        if word == "<TOP>":
+        w = word if isinstance(word, str) else word.decode('utf-8')
+        if w == "<TOP>":
             return self.indexes["<TOP>"]
-        if word.startswith("<NULL"):
+        if w.startswith("<NULL"):
             return self.indexes["<NULL>"]
 
         if self.prepr:
-            word = self._preprocess(word)
-        if self.punct is not None and word not in self.indexes and word in list(string.punctuation):
+            w = self._preprocess(w)
+        if self.punct is not None and w not in self.indexes and w in list(string.punctuation):
             return self.indexes["<PUNCT>"]
-        elif word in self.indexes:
-            return self.indexes[word]
+        elif w in self.indexes:
+            return self.indexes[w]
         else:
             return self.indexes["<UNK>"]
 
     def _preprocess(self, word):
-        if word.startswith('"') and word.endswith('"') and len(word) > 2:
-            word = word[1:-1]
+        w = word if isinstance(word, str) else word.decode('utf-8')
+        if w.startswith('"') and w.endswith('"') and len(w) > 2:
+            w = w[1:-1]
         reg = re.compile(".+-[0-9][0-9]")
-        word = word.strip().lower()
-        if reg.match(word) is not None:
-            word = word.split("-")[0]
-        if re.match("^[0-9]", word) is not None:
+        w = w.strip().lower()
+        if reg.match(w) is not None:
+            w = w.split("-")[0]
+        if re.match("^[0-9]", w) is not None:
             word = word[0]
-        word = word.replace("0","zero")
-        word = word.replace("1","one")
-        word = word.replace("2","two")
-        word = word.replace("3","three")
-        word = word.replace("4","four")
-        word = word.replace("5","five")
-        word = word.replace("6","six")
-        word = word.replace("7","seven")
-        word = word.replace("8","eight")
-        word = word.replace("9","nine")
-        return word
+        w = w.replace("0","zero").replace("1","one").replace("2","two").replace("3","three").replace("4","four")\
+             .replace("5","five").replace("6","six").replace("7","seven").replace("8","eight").replace("9","nine")
+        return w
         
     def vocabSize(self):
         return self.counter - 1
@@ -180,20 +174,20 @@ class Embs:
             
     def __init__(self, resources_dir, model_dir, generate = False):
         random.seed(0)
-        punct100 = [float(0.02*random.random())-0.01 for i in xrange(100)]
-        unk100 = [float(0.02*random.random())-0.01 for i in xrange(100)]
-        root100 = [float(0.02*random.random())-0.01 for i in xrange(100)]
+        punct100 = [float(0.02*random.random())-0.01 for i in range(100)]
+        unk100 = [float(0.02*random.random())-0.01 for i in range(100)]
+        root100 = [float(0.02*random.random())-0.01 for i in range(100)]
 
-        unk50 = [float(0.02*random.random())-0.01 for i in xrange(50)]
-        root50 = [float(0.02*random.random())-0.01 for i in xrange(50)]
+        unk50 = [float(0.02*random.random())-0.01 for i in range(50)]
+        root50 = [float(0.02*random.random())-0.01 for i in range(50)]
 
-        unk10 = [float(0.02*random.random())-0.01 for i in xrange(10)]
-        root10 = [float(0.02*random.random())-0.01 for i in xrange(10)]
+        unk10 = [float(0.02*random.random())-0.01 for i in range(10)]
+        root10 = [float(0.02*random.random())-0.01 for i in range(10)]
 
-        null10 = [float(0.02*random.random())-0.01 for i in xrange(10)]
-        null50 = [float(0.02*random.random())-0.01 for i in xrange(50)]
+        null10 = [float(0.02*random.random())-0.01 for i in range(10)]
+        null50 = [float(0.02*random.random())-0.01 for i in range(50)]
 
-        punct50 = [float(0.02*random.random())-0.01 for i in xrange(50)]
+        punct50 = [float(0.02*random.random())-0.01 for i in range(50)]
 
         self.deps = RndInitLearnedEmbs(model_dir + "/dependencies.txt")
         self.pos =  RndInitLearnedEmbs(resources_dir + "/postags.txt")

@@ -13,7 +13,7 @@ files to train the system or to run in oracle mode (--amrs).
 '''
 
 import argparse
-import cPickle as pickle
+import pickle
 from node import Node
 from buftoken import BufToken
 import sys
@@ -70,7 +70,7 @@ def run(prefix, amrs, language):
     allalignments = []
     k = 0
     for i_s, sentence in enumerate(data.getAllSents()):
-        print "Sentence", i_s + 1
+        print("Sentence", i_s + 1)
         k += 1
         if amrs:
             variables = {}
@@ -151,7 +151,10 @@ def run(prefix, amrs, language):
             index += 1
         dependencies = []
         for d in sentence.dependencies:
-            dependencies.append((indexes[d[0]], d[1], indexes[d[2]]))
+            try:
+                dependencies.append((indexes[d[0]], d[1], indexes[d[2]]))
+            except IndexError:
+                dependencies.append((indexes[d[0]], d[1], indexes[d[2]-1]))
         assert(-1 not in indexes)
 
         for tok, al in zip(buftokens, align_list):

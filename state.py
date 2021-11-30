@@ -165,7 +165,8 @@ class State:
             if len(sg.nodes) == 0:
                 graph = "NULL"
             elif tmprels == Relations():
-                graph = "(" + sg.nodes[0].concept + ")"
+                concept = sg.nodes[0].concept if isinstance(sg.nodes[0].concept, str) else sg.nodes[0].concept.decode('utf-8')
+                graph = "(" + concept + ")"
             else:
                 graph, _, _ = tostring.to_string(tmprels.triples(), "TOP")
             #print self.sentence, "|||", self.counter - 1, "|||", " ".join(graph.replace("\n","").split())

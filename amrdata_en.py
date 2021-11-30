@@ -13,8 +13,8 @@ from alignments import Alignments as Alignments
 import sys
 import amrevaluation.smatch.amr_edited as amrannot
 sys.path.append("..")
-reload(sys)
-sys.setdefaultencoding('utf8')
+#reload(sys)
+#sys.setdefaultencoding('utf8')
 
 class AMRSentence:
     def __init__(self, tokens, pos, lemmas, nes, dependencies, variables = None, relations = None, graph = None, alignments = None):

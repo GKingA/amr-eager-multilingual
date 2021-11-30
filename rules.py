@@ -58,7 +58,8 @@ class Rules:
         for i, rel in enumerate(self.labels):
             if rel.startswith(":ARG"):
                 if rel.endswith("-of"):
-                    if re.match(r'.*-[0-9][0-9]*', node2.concept) is None:
+                    node2_concept = node2.concept if isinstance(node2.concept, str) else node2.concept.decode('utf-8')
+                    if re.match(r'.*-[0-9][0-9]*', node2_concept) is None:
                         legals[i] = 0
                     else:
                         ind = int(rel[-4])
@@ -67,8 +68,11 @@ class Rules:
                         else:
                             legals[i] = 1
                 else:
-                    if node1.concept is not None and re.match(".*-[0-9][0-9]*", node1.concept) is None:
-                        legals[i] = 0
+                    if node1.concept is not None:
+                        node1_concept = node1.concept if isinstance(node1.concept, str) else node1.concept.decode(
+                            'utf-8')
+                    if node1.concept is not None and re.match(".*-[0-9][0-9]*", node1_concept) is None:
+                            legals[i] = 0
                     else:
                         ind = int(rel[-1])
                         if len(self.args_rules) > ind and node1.concept in self.args_rules[ind]:
@@ -81,7 +85,7 @@ class Rules:
                     rules = self.rels_rules[rel]
                     if "a" in rules and node1.isRoot == False and rules["a"].match(node1.var) == None:
                         legal = False
-                    if "b" in rules and rules["b"].match(node2.concept) == None:
+                    if "b" in rules and rules["b"].match(node2_concept) == None:
                         legal = False
                     if "a_isroot" in rules and rules["a_isroot"] == "true" and node1.isRoot == False:
                         legal = False

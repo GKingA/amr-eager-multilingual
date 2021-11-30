@@ -44,20 +44,20 @@ class AMR(object):
         """
         # initialize AMR graph nodes using list of nodes name
         # root, by default, is the first in var_list
-	attribute_list2 = []
-	for dct in attribute_list:
+        attribute_list2 = []
+        for dct in attribute_list:
             dct2 = collections.OrderedDict() 
-	    for item in dct:
+            for item in dct:
                 if len(dct[item]) > 1 and dct[item].endswith("_"):
-	            dct[item] = '"' + dct[item][0:-1] + '"'
-		dct2[item] = dct[item]
-	    attribute_list2.append(dct2)
+                    dct[item] = '"' + dct[item][0:-1] + '"'
+                dct2[item] = dct[item]
+            attribute_list2.append(dct2)
         reent2 = []
-	for r in reent:
-	    if len(r[2]) > 1 and r[2].endswith("_"):
-	        reent2.append((r[0], r[1], '"' + r[2][0:-1] + '"'))
-	    else:
-	        reent2.append(r)
+        for r in reent:
+            if len(r[2]) > 1 and r[2].endswith("_"):
+                reent2.append((r[0], r[1], '"' + r[2][0:-1] + '"'))
+            else:
+                reent2.append(r)
         allrelations2 = []
         for r in allrelations:
             if len(r[2]) > 1 and r[2].endswith("_"):
@@ -86,7 +86,7 @@ class AMR(object):
         else:
             self.attributes = attribute_list2[:]
 
-	self.reent= reent2
+        self.reent= reent2
         self.allrelations = allrelations2
 
     def rename_node(self, prefix):
@@ -105,11 +105,11 @@ class AMR(object):
         for i, d in enumerate(self.relations):
             new_dict = {}
             for k, v_lst in d.items():
-		for v in v_lst:
-			if node_map_dict[k] not in new_dict:
-	                	new_dict[node_map_dict[k]] = [v]
-			else:
-				new_dict[node_map_dict[k]].append(v)
+                for v in v_lst:
+                        if node_map_dict[k] not in new_dict:
+                                new_dict[node_map_dict[k]] = [v]
+                        else:
+                                new_dict[node_map_dict[k]].append(v)
             self.relations[i] = new_dict
  
     def get_triples(self):
@@ -128,8 +128,8 @@ class AMR(object):
             # k is the other node this node has relation with
             # v is relation name
             for k, v_lst in self.relations[i].items():
-		for v in v_lst:
-	                relation_triple.append((v, self.nodes[i], k))
+                for v in v_lst:
+                        relation_triple.append((v, self.nodes[i], k))
             # k2 is the attribute name
             # v2 is the attribute value
             for k2, v2 in self.attributes[i].items():
@@ -156,8 +156,8 @@ class AMR(object):
             # k is the other node this node has relation with
             # v is relation name
             for k, v_lst in self.relations[i].items():
-		for v in v_lst:
-                	relation_triple.append((v, self.nodes[i], k))
+                for v in v_lst:
+                        relation_triple.append((v, self.nodes[i], k))
             # k2 is the attribute name
             # v2 is the attribute value
             for k2, v2 in self.attributes[i].items():
@@ -180,8 +180,8 @@ class AMR(object):
             lines.append("Value: " + self.node_values[i])
             lines.append("Relations:")
             for k, v_lst in self.relations[i].items():
-		for v in v_lst:
-	                lines.append("Node " + k + " via " + v)
+                for v in v_lst:
+                        lines.append("Node " + k + " via " + v)
             for k2, v2 in self.attributes[i].items():
                 lines.append("Attribute: " + k2 + " value " + v2)
         return "\n".join(lines)
@@ -223,8 +223,8 @@ class AMR(object):
         node_relation_dict1 = defaultdict(list)
         # key: node name, value: list of (attribute name, const value) or (relation name, unseen node name)
         node_relation_dict2 = defaultdict(list)
-	allrelations = []
-	reent = []
+        allrelations = []
+        reent = []
         # current relation name
         cur_relation_name = ""
         # having unmatched quote string
@@ -299,20 +299,20 @@ class AMR(object):
                         print >> ERROR_LOG, "Error in processing", line[:i], relation_name, relation_value
                         return None
                     # if we have not seen this node name before
-		    if relation_name.endswith("-of") and normalize_inv:
-                    	allrelations.append((relation_value,relation_name[:-3],stack[-1]))
-                    	if relation_value not in node_dict:
-                        	node_relation_dict2[relation_value].append((relation_name[:-3], stack[-1]))
-                    	else:
-                        	node_relation_dict1[relation_value].append((relation_name[:-3], stack[-1]))
-                    	reent.append((relation_value,relation_name[:-3],stack[-1]))
-		    else:
-		    	allrelations.append((stack[-1],relation_name,relation_value))
-                    	if relation_value not in node_dict:
-                        	node_relation_dict2[stack[-1]].append((relation_name, relation_value))
-                    	else:
-                        	node_relation_dict1[stack[-1]].append((relation_name, relation_value))
-		    	reent.append((stack[-1],relation_name,relation_value))
+                    if relation_name.endswith("-of") and normalize_inv:
+                            allrelations.append((relation_value,relation_name[:-3],stack[-1]))
+                            if relation_value not in node_dict:
+                                node_relation_dict2[relation_value].append((relation_name[:-3], stack[-1]))
+                            else:
+                                node_relation_dict1[relation_value].append((relation_name[:-3], stack[-1]))
+                            reent.append((relation_value,relation_name[:-3],stack[-1]))
+                    else:
+                            allrelations.append((stack[-1],relation_name,relation_value))
+                            if relation_value not in node_dict:
+                                node_relation_dict2[stack[-1]].append((relation_name, relation_value))
+                            else:
+                                node_relation_dict1[stack[-1]].append((relation_name, relation_value))
+                            reent.append((stack[-1],relation_name,relation_value))
                 state = 2
             elif c == "/":
                 if in_quote:
@@ -347,13 +347,13 @@ class AMR(object):
                         if (not cur_relation_name.endswith("-of")) or normalize_inv == False:
                             # stack[-2] is upper_level node we encountered, as we just add node_name to stack
                             node_relation_dict1[stack[-2]].append((cur_relation_name, node_name))
-			    allrelations.append((stack[-2],cur_relation_name, node_name))
-			    #if node_name in node_name_list:
-                            #	reent.append((stack[-2],cur_relation_name,node_name))
+                            allrelations.append((stack[-2],cur_relation_name, node_name))
+                            #if node_name in node_name_list:
+                            #        reent.append((stack[-2],cur_relation_name,node_name))
                         else:
                             # cur_relation_name[:-3] is to delete "-of"
                             node_relation_dict1[node_name].append((cur_relation_name[:-3], stack[-2]))
-			    allrelations.append((node_name,cur_relation_name[:-3], stack[-2]))
+                            allrelations.append((node_name,cur_relation_name[:-3], stack[-2]))
                         # clear current_relation_name
                         cur_relation_name = ""
                 else:
@@ -385,19 +385,19 @@ class AMR(object):
                     # store reverse of the relation
                     # we are sure relation_value is a node here, as "-of" relation is only between two nodes
                     if relation_name.endswith("-of") and normalize_inv:
-			allrelations.append((relation_value,relation_name[:-3], stack[-1]))
+                        allrelations.append((relation_value,relation_name[:-3], stack[-1]))
                         node_relation_dict1[relation_value].append((relation_name[:-3], stack[-1]))
                     # attribute value not seen before
                     # Note that it might be a constant attribute value, or an unseen node
                     # process this after we have seen all the node names
-		    else:
-	            	allrelations.append((stack[-1],relation_name, relation_value))
-                    	if relation_value not in node_dict:
-                        	node_relation_dict2[stack[-1]].append((relation_name, relation_value))
-                    	else:
-                        	node_relation_dict1[stack[-1]].append((relation_name, relation_value))
-		    #if relation_value in node_name_list:
-		    reent.append((stack[-1],relation_name,relation_value))
+                    else:
+                            allrelations.append((stack[-1],relation_name, relation_value))
+                            if relation_value not in node_dict:
+                                node_relation_dict2[stack[-1]].append((relation_name, relation_value))
+                            else:
+                                node_relation_dict1[stack[-1]].append((relation_name, relation_value))
+                    #if relation_value in node_name_list:
+                    reent.append((stack[-1],relation_name,relation_value))
                 # Last significant symbol is "/". Now we encounter ")"
                 # Example:
                 # :arg1 (n / nation)
@@ -432,10 +432,10 @@ class AMR(object):
             attribute_dict = collections.OrderedDict()
             if v in node_relation_dict1:
                 for v1 in node_relation_dict1[v]:
-		    if v1[1] not in relation_dict:		    
-	                    relation_dict[v1[1]] = [v1[0]]
-		    else:
-			    relation_dict[v1[1]].append(v1[0])
+                    if v1[1] not in relation_dict:                    
+                            relation_dict[v1[1]] = [v1[0]]
+                    else:
+                            relation_dict[v1[1]].append(v1[0])
             if v in node_relation_dict2:
                 for v2 in node_relation_dict2[v]:
                     # if value is in quote, it is a constant value
@@ -444,10 +444,10 @@ class AMR(object):
                         attribute_dict[v2[0]] = v2[1][1:-1]
                     # if value is a node name
                     elif v2[1] in node_dict:
-			if v2[1] not in relation_dict:
-	                        relation_dict[v2[1]] = [v2[0]]
-			else:
-				relation_dict[v2[1]].append(v2[0])
+                        if v2[1] not in relation_dict:
+                                relation_dict[v2[1]] = [v2[0]]
+                        else:
+                                relation_dict[v2[1]].append(v2[0])
                     else:
                         attribute_dict[v2[0]] = v2[1]
             # each node has a relation map and attribute map

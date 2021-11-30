@@ -11,7 +11,7 @@ gold graph and alignments). See command line arguments below for more informatio
 '''
 
 import argparse
-import cPickle as pickle
+import pickle
 from transition_system import TransitionSystem
 from transition_system import loadModels
 import copy
@@ -49,7 +49,8 @@ def _to_string(triples, root, level, last_child, seen, prefix, indexes, nodes):
         if str(t[0]) == root.split()[0]:
             next_r = t[3]
             if t[4] != "":
-                next_r += " / " + t[4]
+                t_string = t[4] if isinstance(t[4], str) else t[4].decode('utf-8')
+                next_r += " / " + t_string
             for i in range(0, level):
                 graph += "    "
             seen2 = copy.deepcopy(seen)
@@ -68,7 +69,9 @@ def to_string(triples, root):
     assert(len(children)==1)
     if children[0][4] == "":
         return "(e / emptygraph)", defaultdict(list), []
-    return _to_string(triples, children[0][3] + " / " + children[0][4], 1, False, [], "0", defaultdict(list), [])
+    child_3 = children[0][3] if isinstance(children[0][3], str) else children[0][3].decode('utf-8')
+    child_4 = children[0][4] if isinstance(children[0][4], str) else children[0][4].decode('utf-8')
+    return _to_string(triples, child_3 + " / " + child_4, 1, False, [], "0", defaultdict(list), [])
 
 def main(args):
     Resources.init_table(args.model, False)

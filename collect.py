@@ -12,7 +12,7 @@ Run as: python collect.py -t <training AMR file>
 @since: 03-10-16
 '''
 
-import cPickle as pickle
+import pickle
 from transition_system import TransitionSystem
 from embs import Embs
 from resources import Resources
@@ -23,13 +23,13 @@ import re
 def collect(prefix, language, model_dir):
     Resources.init_table(model_dir, True)
 
-    print "Loading data.."
+    print("Loading data..")
     alltokens = pickle.load(open(prefix + ".tokens.p", "rb"))
     alldependencies = pickle.load(open(prefix + ".dependencies.p", "rb"))
     allalignments = pickle.load(open(prefix + ".alignments.p", "rb"))
     allrelations = pickle.load(open(prefix + ".relations.p", "rb"))
 
-    print "Collecting relation labels.."
+    print("Collecting relation labels..")
     seen_r = set()
     fw = open(model_dir + "/relations.txt","w")
     for relations in allrelations:
@@ -39,7 +39,7 @@ def collect(prefix, language, model_dir):
                 seen_r.add(r[1])
     fw.close()
 
-    print "Collecting dependency labels.."
+    print("Collecting dependency labels..")
     seen_d = set()
     fw = open(model_dir + "/dependencies.txt","w")
     for dependencies in alldependencies:
@@ -54,12 +54,12 @@ def collect(prefix, language, model_dir):
     embs = Embs(resources_dir, model_dir, True)
     for tokens, dependencies, alignments, relations in zip(alltokens, alldependencies, allalignments, allrelations):
         counter += 1
-        print "Sentence no: ", counter
+        print("Sentence no: ", counter)
         data = (tokens, dependencies, relations, alignments)
         t = TransitionSystem(embs, data, "COLLECT", language)
 
     Resources.store_table(model_dir)
-    print "Done"
+    print("Done")
 
 if __name__ == "__main__":
     argparser = argparse.ArgumentParser()
@@ -74,4 +74,4 @@ if __name__ == "__main__":
         sys.exit(0)
 
     collect(args.train, args.lang, args.modeldir)
-    print "Done"
+    print("Done")
